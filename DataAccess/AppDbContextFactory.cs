@@ -13,7 +13,7 @@ namespace DataAccess
         public AppDbContext CreateDbContext(string[] args)
         {
             DbContextOptionsBuilder<AppDbContext> optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
-            optionsBuilder.UseNpgsql("Server=localhost;Port=5432;Database=BookDB;User Id=myUsername;Password=myPassword;");
+            optionsBuilder.UseNpgsql("Server=localhost;Port=5432;Database=BookDB;User Id=postgres;Password=123;");
             return new AppDbContext(optionsBuilder.Options);
         }
     }
