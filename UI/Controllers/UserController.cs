@@ -6,6 +6,7 @@ namespace UI.Controllers
     {
         public IActionResult Index()
         {
+            ViewBag.Url = "https://localhost:44346";
             return View();
         }
     }

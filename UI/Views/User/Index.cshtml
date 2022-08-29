@@ -1,0 +1,141 @@
+﻿
+@{
+    ViewData["Title"] = "Kullanıcılar";
+}
+
+<h1>Kullanıcı Listesi</h1>
+<table id="KullanıcıListesi"
+       data-toggle="KullanıcıListesi"
+       data-click-to-select="true"
+       data-show-colums="true"
+       data-checkbox-header="false"
+       data-multiple-select-row="true"
+       data-toolbar="#toolbar"
+       data-pagination="true"
+       data-search="true">
+    <thead>
+        <tr>
+            <th id="chk" data-field="state" data-checkbox="true"></th>
+            <th data-field="name">Ad</th>
+            <th data-field="surname">Soyad</th>
+            <th data-field="phoneNumber">Telefon Numarası</th>
+            <th data-field="confirmed">Onaylı Mı?</th>
+        </tr>
+    </thead>
+    <tbody><tr></tr></tbody>
+</table>
+
+<!-- Button modal -->
+<button id="btnEkleModal" type="button" class="btn btn-primary" data-toggle="modal" data-target="#ekleModal">
+    Kayıt
+</button>
+<button id="btnGuncelleModal" type="button" class="btn btn-info" data-toggle="modal" data-target="#guncelleModal">
+    Guncelle
+</button>
+<button id="btnSil" class="btn btn-danger">Sil</button>
+<!-- Modal Ekleme İçin-->
+<div class="modal fade" id="ekleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Kayıt İşlemi</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="frmEkle">
+                    <div class="form-group">
+                        <label>Ad</label>
+                        <input type="text" class="form-control" id="AdEkle" name="name" />
+                    </div>
+                    <div class="form-group">
+                        <label>Soyad</label>
+                        <input type="text" class="form-control" id="SoyadEkle" name="surname" />
+                    </div>
+                    <div class="form-group">
+                        <label>Telefon Numarası</label>
+                        <input type="text" class="form-control" id="TelefonEkle" name="phoneNumber" />
+                    </div>
+                    <div class="form-group">
+                        <label>Onaylı Mı?</label>
+                        @*<select class="form-control" id="OnayEkle" name="confirmed">
+                            <option value="0" selected>No</option>
+                            <option value="1">Yes</option>
+                        </select>*@
+                        <input type="checkbox" class="form-control" id="OnayEkle" name="confirmed" />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button id="btnEkle" type="button" class="btn btn-primary">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Güncelleme İçin -->
+<div class="modal fade" id="guncelleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Güncelleme İşlemi</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="frmGuncelle">
+                    
+                    <div class="form-group">
+                        <label>Ad</label>
+                        <input type="text" class="form-control" id="AdGuncelle" name="name" />
+                    </div>
+                    <div class="form-group">
+                        <label>Soyad</label>
+                        <input type="text" class="form-control" id="SoyadGuncelle" name="surname" />
+                    </div>
+                    <div class="form-group">
+                        <label>Telefon Numarası</label>
+                        <input type="text" class="form-control" id="TelefonGuncelle" name="phoneNumber" />
+                    </div>
+                    <div class="form-group">
+                        <label>Onaylı Mı?</label>
+                        <input type="checkbox" class="form-control" id="OnayGuncelle" name="Confirmed" />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button id="btnGuncelle" type="button" class="btn btn-primary">Guncelle</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var url = '';
+    $(document).ready(function(){
+        url = '@ViewBag.Url';
+        Veri_Listele(url + '/api/User/List', 'KullanıcıListesi');
+        $('#btnEkle').click(function(){
+            Veri_Ekle(url + '/api/User/Add', 'frmEkle');
+        });
+        $('#btnSil').click(function () {
+            var data = $('#KullanıcıListesi').bootstrapTable('getSelections')[0];
+            Veri_Sil(url + '/api/User/Delete', data);
+        });
+        $('#btnGuncelleModal').click(function(){
+            var data = $('#KullanıcıListesi').bootstrapTable('getSelections')[0].id;
+            Veri_Getir_UserIcin(url + 'api/User/Get', data);
+            $('#btnGuncelle').click(function(){
+                var nesne = {};
+               nesne.ad = $('#AdGuncelle').val();
+               nesne.soyad = $('#SoyadGuncelle').val();
+               nesne.telefon = $('#TelefonGuncelle').val();
+               nesne.onayliMi = $('#OnayGuncelle').val();
+                Veri_Guncelle(url + '/api/User/Update', nesne);
+            });
+        });
+    });
+</script>
